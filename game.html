@@ -74,7 +74,7 @@
       border-radius: 8px;
       cursor: pointer;
       transition: background-color 0.3s ease-in-out;
-      width: 100%;
+      width: 80%; /* Make sure the buttons have the same width */
       margin: 15px 0;
       box-sizing: border-box;
     }
@@ -154,6 +154,46 @@
       background-color: #c6292e;
     }
 
+    /* Quiz Completion Popup Style */
+#completionPopup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  z-index: 2000;
+  width: 80%;
+  max-width: 400px;
+}
+
+#completionPopup p {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+#completionPopup button {
+  padding: 12px 25px;
+  background-color: #58A4B0;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  margin-top: 10px;
+  width: 45%;
+}
+
+#completionPopup button:hover {
+  background-color: #2c7a99;
+}
+
+
     /* Styling for mobile responsiveness */
     @media (max-width: 600px) {
       header {
@@ -180,9 +220,16 @@
 </head>
 <body>
 
-  <header>
+  <!-- <header>
     LearnixMath - Quiz
-  </header>
+  </header> -->
+
+  <!-- Quiz Completion Popup -->
+<div id="completionPopup" style="display: none;">
+  <p id="completionMessage"></p>
+  <button onclick="resetGame()">OK</button>
+</div>
+
 
   <!-- Number of Questions Selection Page -->
   <div class="selection-container" id="selectionPage">
@@ -219,11 +266,6 @@
   </div>
 
   <script>
-    // Get operation and difficulty from URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const operation = urlParams.get('operation');
-    const difficulty = urlParams.get('difficulty');
-
     let numQuestions = 10;
     let currentQuestionIndex = 0;
     let score = 0;
@@ -237,143 +279,52 @@
         gameStarted = true;
         document.getElementById('selectionPage').style.display = 'none';
         document.getElementById('quizPage').style.display = 'flex';
-        generateQuestions();
+        generateQuestion();
       }
     }
 
-    // Generate questions based on operation and difficulty
-    function generateQuestions() {
-      for (let i = 0; i < numQuestions; i++) {
-        let question = generateSingleQuestion(operation, difficulty);
-        questions.push(question);
-      }
-      displayCurrentQuestion();
-    }
-
-    // Generate a single question based on operation and difficulty
-    function generateSingleQuestion(operation, difficulty) {
+    // Generate a question based on the selected operation
+    function generateQuestion() {
       let num1, num2, answer, questionText;
+      const operation = 'addition';  // Set operation type
 
-      switch (difficulty) {
-        case 'beginner':
-          switch (operation) {
-            case 'addition':
-              num1 = Math.floor(Math.random() * 10);
-              num2 = Math.floor(Math.random() * 10);
-              answer = num1 + num2;
-              questionText = `${num1} + ${num2} = ?`;
-              break;
-            case 'subtraction':
-              num1 = Math.floor(Math.random() * 10);
-              num2 = Math.floor(Math.random() * num1);
-              answer = num1 - num2;
-              questionText = `${num1} - ${num2} = ?`;
-              break;
-            case 'multiplication':
-              num1 = Math.floor(Math.random() * 5);
-              num2 = Math.floor(Math.random() * 5);
-              answer = num1 * num2;
-              questionText = `${num1} × ${num2} = ?`;
-              break;
-            case 'division':
-              num2 = Math.floor(Math.random() * 5) + 1;
-              num1 = num2 * (Math.floor(Math.random() * 5) + 1);
-              answer = num1 / num2;
-              questionText = `${num1} ÷ ${num2} = ?`;
-              break;
-          }
-          break;
-
-        case 'intermediate':
-          switch (operation) {
-            case 'addition':
-              num1 = Math.floor(Math.random() * 50) + 10;
-              num2 = Math.floor(Math.random() * 50) + 10;
-              answer = num1 + num2;
-              questionText = `${num1} + ${num2} = ?`;
-              break;
-            case 'subtraction':
-              num1 = Math.floor(Math.random() * 100) + 50;
-              num2 = Math.floor(Math.random() * num1);
-              answer = num1 - num2;
-              questionText = `${num1} - ${num2} = ?`;
-              break;
-            case 'multiplication':
-              num1 = Math.floor(Math.random() * 10);
-              num2 = Math.floor(Math.random() * 10);
-              answer = num1 * num2;
-              questionText = `${num1} × ${num2} = ?`;
-              break;
-            case 'division':
-              num2 = Math.floor(Math.random() * 10) + 1;
-              num1 = num2 * (Math.floor(Math.random() * 10) + 1);
-              answer = num1 / num2;
-              questionText = `${num1} ÷ ${num2} = ?`;
-              break;
-          }
-          break;
-
-        case 'master':
-          switch (operation) {
-            case 'addition':
-              num1 = Math.floor(Math.random() * 500) + 100;
-              num2 = Math.floor(Math.random() * 500) + 100;
-              answer = num1 + num2;
-              questionText = `${num1} + ${num2} = ?`;
-              break;
-            case 'subtraction':
-              num1 = Math.floor(Math.random() * 1000) + 500;
-              num2 = Math.floor(Math.random() * num1);
-              answer = num1 - num2;
-              questionText = `${num1} - ${num2} = ?`;
-              break;
-            case 'multiplication':
-              num1 = Math.floor(Math.random() * 20);
-              num2 = Math.floor(Math.random() * 20);
-              answer = num1 * num2;
-              questionText = `${num1} × ${num2} = ?`;
-              break;
-            case 'division':
-              num2 = Math.floor(Math.random() * 20) + 1;
-              num1 = num2 * (Math.floor(Math.random() * 20) + 1);
-              answer = num1 / num2;
-              questionText = `${num1} ÷ ${num2} = ?`;
-              break;
-          }
+      switch (operation) {
+        case 'addition':
+          num1 = Math.floor(Math.random() * 10) + 1;
+          num2 = Math.floor(Math.random() * 10) + 1;
+          answer = num1 + num2;
+          questionText = `${num1} + ${num2} = ?`;
           break;
       }
 
-      return { question: questionText, correctAnswer: answer };
-    }
-
-    // Display current question
-    function displayCurrentQuestion() {
-      document.getElementById('question').textContent = questions[currentQuestionIndex].question;
+      questions.push({ question: questionText, correctAnswer: answer });
+      document.getElementById('question').textContent = questionText;
       document.getElementById('errorMessage').style.display = 'none';
-      document.getElementById('answer').value = '';
     }
 
-    // Submit the answer and check if it's correct
-    function submitAnswer() {
-      const userAnswer = parseFloat(document.getElementById('answer').value);
-      const correctAnswer = questions[currentQuestionIndex].correctAnswer;
+   // Submit the answer and check if it's correct
+function submitAnswer() {
+  const userAnswer = parseInt(document.getElementById('answer').value);
+  const correctAnswer = questions[currentQuestionIndex].correctAnswer;
 
-      if (userAnswer === correctAnswer) {
-        score++;
-        currentQuestionIndex++;
-        if (currentQuestionIndex < numQuestions) {
-          displayCurrentQuestion();
-        } else {
-          // Show score when all questions are answered
-          alert(`Quiz complete! Your score is: ${score} out of ${numQuestions}`);
-          gameStarted = false;
-          resetGame();
-        }
-      } else {
-        document.getElementById('errorMessage').textContent = 'Wrong answer! Please try again.';
-        document.getElementById('errorMessage').style.display = 'block';
-      }
+  if (userAnswer === correctAnswer) {
+    score++;
+    currentQuestionIndex++;
+    if (currentQuestionIndex < numQuestions) {
+      generateQuestion();
+      document.getElementById('answer').value = '';  // Clear the input field after each question
+    } else {
+      // Show quiz completion popup
+      document.getElementById('completionMessage').textContent = `Quiz complete! Your score is: ${score}`;
+      document.getElementById('completionPopup').style.display = 'block';
+      gameStarted = false;
     }
+  } else {
+    document.getElementById('errorMessage').textContent = 'Wrong answer! Please try again.';
+    document.getElementById('errorMessage').style.display = 'block';
+  }
+}
+
 
     // Exit the game with confirmation (popup inside page)
     function exitGame() {
@@ -394,14 +345,16 @@
       document.getElementById('quizPage').style.display = 'flex';
     }
 
-    // Reset game
-    function resetGame() {
-      score = 0;
-      currentQuestionIndex = 0;
-      questions.length = 0;  // Clear the question array
-      document.getElementById('selectionPage').style.display = 'flex';
-      document.getElementById('quizPage').style.display = 'none';
-    }
+   // Reset game
+function resetGame() {
+  score = 0;
+  currentQuestionIndex = 0;
+  questions.length = 0;  // Clear the question array
+  document.getElementById('selectionPage').style.display = 'flex';
+  document.getElementById('quizPage').style.display = 'none';
+  document.getElementById('completionPopup').style.display = 'none';  // Hide the completion popup
+}
+
   </script>
 
 </body>
