@@ -117,28 +117,34 @@
       transform: scale(1.05);
     }
 
-    /* Responsive Design */
-    @media (min-width: 768px) {
-      .content-container {
-        flex-direction: row;
-        justify-content: space-between;
-        padding: 40px 40px;
-      }
-
-      .card {
-        width: 280px;  /* Card width for medium to large screens */
-      }
+    /* Additional Content */
+    .level-container, .questions-container {
+      display: none;
+      margin-top: 20px;
     }
 
-    @media (max-width: 768px) {
-      .card {
-        width: 90%;
-      }
+    .level-buttons, .question-buttons {
+      display: flex;
+      gap: 10px;
+    }
 
-      header {
-        padding: 20px 0;
-        font-size: 26px;
-      }
+    .level-buttons button, .question-buttons button {
+      padding: 10px 20px;
+      border-radius: 5px;
+      background-color: #58A4B0;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .level-buttons button:hover, .question-buttons button:hover {
+      background-color: #2C7A99;
+    }
+
+    .questions-container {
+      margin-top: 20px;
+      font-size: 18px;
+      text-align: center;
     }
   </style>
 </head>
@@ -154,24 +160,124 @@
     <div class="card">
       <div class="card-title">Addition</div>
       <div class="card-description">Practice addition problems from easy to difficult levels. Improve your skills step by step.</div>
-      <button class="card-button" onclick="window.location.href='addition.html'">Start</button>
+      <button class="card-button" onclick="showLevelSelection('addition')">Start</button>
     </div>
     <div class="card">
       <div class="card-title">Subtraction</div>
       <div class="card-description">Enhance your subtraction abilities with a wide range of exercises and challenges.</div>
-      <button class="card-button" onclick="window.location.href='subtraction.html'">Start</button>
+      <button class="card-button" onclick="showLevelSelection('subtraction')">Start</button>
     </div>
     <div class="card">
       <div class="card-title">Multiplication</div>
       <div class="card-description">Master multiplication with timed exercises and progressively challenging problems.</div>
-      <button class="card-button" onclick="window.location.href='multiplication.html'">Start</button>
+      <button class="card-button" onclick="showLevelSelection('multiplication')">Start</button>
     </div>
     <div class="card">
       <div class="card-title">Division</div>
       <div class="card-description">Test your division skills with various levels and track your progress.</div>
-      <button class="card-button" onclick="window.location.href='division.html'">Start</button>
+      <button class="card-button" onclick="showLevelSelection('division')">Start</button>
     </div>
   </div>
+
+  <!-- Level Selection (Hidden initially) -->
+  <div class="level-container">
+    <h2>Select Difficulty Level</h2>
+    <div class="level-buttons">
+      <button onclick="selectLevel('beginner')">Beginner</button>
+      <button onclick="selectLevel('intermediate')">Intermediate</button>
+      <button onclick="selectLevel('master')">Master</button>
+    </div>
+  </div>
+
+  <!-- Number of Questions Selection (Hidden initially) -->
+  <div class="questions-container">
+    <h3>Select Number of Questions</h3>
+    <div class="question-buttons">
+      <button onclick="startGame(5)">5 Questions</button>
+      <button onclick="startGame(10)">10 Questions</button>
+      <button onclick="startGame(20)">20 Questions</button>
+    </div>
+  </div>
+
+  <script>
+    let currentOperation = '';
+    let currentLevel = '';
+    let numberOfQuestions = 0;
+
+    // Show Level Selection after Operation Click
+    function showLevelSelection(operation) {
+      currentOperation = operation;
+      document.querySelector('.level-container').style.display = 'block';
+    }
+
+    // Select Level
+    function selectLevel(level) {
+      currentLevel = level;
+      document.querySelector('.level-container').style.display = 'none';
+      document.querySelector('.questions-container').style.display = 'block';
+    }
+
+    // Start the game and display random questions
+    function startGame(numQuestions) {
+      numberOfQuestions = numQuestions;
+      document.querySelector('.questions-container').style.display = 'none';
+      generateQuestions();
+    }
+
+    // Generate Random Questions based on selected operation, level, and number of questions
+    function generateQuestions() {
+      const questions = [];
+      const operations = {
+        addition: '+',
+        subtraction: '-',
+        multiplication: '*',
+        division: '/'
+      };
+
+      for (let i = 0; i < numberOfQuestions; i++) {
+        let num1 = Math.floor(Math.random() * 100) + 1;
+        let num2 = Math.floor(Math.random() * 100) + 1;
+        let answer = 0;
+
+        if (currentLevel === 'beginner') {
+          num1 = Math.floor(Math.random() * 10) + 1;
+          num2 = Math.floor(Math.random() * 10) + 1;
+        } else if (currentLevel === 'intermediate') {
+          num1 = Math.floor(Math.random() * 50) + 1;
+          num2 = Math.floor(Math.random() * 50) + 1;
+        }
+
+        switch (currentOperation) {
+          case 'addition':
+            answer = num1 + num2;
+            break;
+          case 'subtraction':
+            answer = num1 - num2;
+            break;
+          case 'multiplication':
+            answer = num1 * num2;
+            break;
+          case 'division':
+            answer = (num1 / num2).toFixed(2); // Fixed decimal places for division
+            break;
+        }
+
+        questions.push(`${num1} ${operations[currentOperation]} ${num2} = ?`);
+      }
+
+      // Display Questions
+      displayQuestions(questions);
+    }
+
+    // Display Generated Questions
+    function displayQuestions(questions) {
+      let questionHTML = '<h3>Answer the following questions:</h3>';
+      questions.forEach((question, index) => {
+        questionHTML += `<p>${index + 1}. ${question}</p>`;
+      });
+      document.body.innerHTML += questionHTML;
+    }
+  </script>
 
 </body>
 </html>
