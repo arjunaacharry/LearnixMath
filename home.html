@@ -117,19 +117,37 @@
       transform: scale(1.05);
     }
 
-    /* Additional Content */
-    .level-container, .questions-container {
+    /* Modal (Popup) Styles */
+    .modal {
       display: none;
-      margin-top: 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease-in-out;
     }
 
-    .level-buttons, .question-buttons {
-      display: flex;
-      gap: 10px;
+    .modal-content {
+      background-color: #FFFFFF;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      text-align: center;
     }
 
-    .level-buttons button, .question-buttons button {
+    .modal h2 {
+      color: #2C7A99; /* Primary Blue */
+      margin-bottom: 20px;
+    }
+
+    .modal-buttons button {
       padding: 10px 20px;
+      margin: 5px;
       border-radius: 5px;
       background-color: #58A4B0;
       color: white;
@@ -137,14 +155,34 @@
       transition: background-color 0.3s ease;
     }
 
-    .level-buttons button:hover, .question-buttons button:hover {
+    .modal-buttons button:hover {
       background-color: #2C7A99;
     }
 
-    .questions-container {
+    /* Fade-in animation */
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    /* Close button */
+    .close-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
       margin-top: 20px;
-      font-size: 18px;
-      text-align: center;
+    }
+
+    .close-btn:hover {
+      background-color: #c0392b;
     }
   </style>
 </head>
@@ -160,37 +198,40 @@
     <div class="card">
       <div class="card-title">Addition</div>
       <div class="card-description">Practice addition problems from easy to difficult levels. Improve your skills step by step.</div>
-      <button class="card-button" onclick="showLevelSelection('addition')">Start</button>
+      <button class="card-button" onclick="showModal('addition')">Start</button>
     </div>
     <div class="card">
       <div class="card-title">Subtraction</div>
       <div class="card-description">Enhance your subtraction abilities with a wide range of exercises and challenges.</div>
-      <button class="card-button" onclick="showLevelSelection('subtraction')">Start</button>
+      <button class="card-button" onclick="showModal('subtraction')">Start</button>
     </div>
     <div class="card">
       <div class="card-title">Multiplication</div>
       <div class="card-description">Master multiplication with timed exercises and progressively challenging problems.</div>
-      <button class="card-button" onclick="showLevelSelection('multiplication')">Start</button>
+      <button class="card-button" onclick="showModal('multiplication')">Start</button>
     </div>
     <div class="card">
       <div class="card-title">Division</div>
       <div class="card-description">Test your division skills with various levels and track your progress.</div>
-      <button class="card-button" onclick="showLevelSelection('division')">Start</button>
+      <button class="card-button" onclick="showModal('division')">Start</button>
     </div>
   </div>
 
-  <!-- Level Selection (Hidden initially) -->
-  <div class="level-container">
-    <h2>Select Difficulty Level</h2>
-    <div class="level-buttons">
-      <button onclick="selectLevel('beginner')">Beginner</button>
-      <button onclick="selectLevel('intermediate')">Intermediate</button>
-      <button onclick="selectLevel('master')">Master</button>
+  <!-- Modal for Difficulty Level -->
+  <div class="modal" id="difficultyModal">
+    <div class="modal-content">
+      <h2>Select Difficulty Level</h2>
+      <div class="modal-buttons">
+        <button onclick="selectLevel('beginner')">Beginner</button>
+        <button onclick="selectLevel('intermediate')">Intermediate</button>
+        <button onclick="selectLevel('master')">Master</button>
+      </div>
+      <button class="close-btn" onclick="closeModal()">Close</button>
     </div>
   </div>
 
   <!-- Number of Questions Selection (Hidden initially) -->
-  <div class="questions-container">
+  <div class="questions-container" id="questionsContainer" style="display: none;">
     <h3>Select Number of Questions</h3>
     <div class="question-buttons">
       <button onclick="startGame(5)">5 Questions</button>
@@ -204,23 +245,28 @@
     let currentLevel = '';
     let numberOfQuestions = 0;
 
-    // Show Level Selection after Operation Click
-    function showLevelSelection(operation) {
+    // Show the modal when an operation is selected
+    function showModal(operation) {
       currentOperation = operation;
-      document.querySelector('.level-container').style.display = 'block';
+      document.getElementById('difficultyModal').style.display = 'flex';
     }
 
-    // Select Level
+    // Select the difficulty level and proceed
     function selectLevel(level) {
       currentLevel = level;
-      document.querySelector('.level-container').style.display = 'none';
-      document.querySelector('.questions-container').style.display = 'block';
+      document.getElementById('difficultyModal').style.display = 'none';
+      document.getElementById('questionsContainer').style.display = 'block';
     }
 
-    // Start the game and display random questions
+    // Close the modal
+    function closeModal() {
+      document.getElementById('difficultyModal').style.display = 'none';
+    }
+
+    // Start the game with selected number of questions
     function startGame(numQuestions) {
       numberOfQuestions = numQuestions;
-      document.querySelector('.questions-container').style.display = 'none';
+      document.getElementById('questionsContainer').style.display = 'none';
       generateQuestions();
     }
 
@@ -258,26 +304,14 @@
             answer = num1 * num2;
             break;
           case 'division':
-            answer = (num1 / num2).toFixed(2); // Fixed decimal places for division
+            answer = (num1 / num2).toFixed(2);
             break;
         }
-
+        
         questions.push(`${num1} ${operations[currentOperation]} ${num2} = ?`);
       }
-
-      // Display Questions
-      displayQuestions(questions);
-    }
-
-    // Display Generated Questions
-    function displayQuestions(questions) {
-      let questionHTML = '<h3>Answer the following questions:</h3>';
-      questions.forEach((question, index) => {
-        questionHTML += `<p>${index + 1}. ${question}</p>`;
-      });
-      document.body.innerHTML += questionHTML;
+      alert('Your questions are: ' + questions.join('\n'));
     }
   </script>
-
 </body>
 </html>
