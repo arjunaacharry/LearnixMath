@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LearnixMath - Quiz</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: #58A4B0;
+      color: white;
+      font-size: 30px;
+      font-weight: bold;
+      padding: 25px 0;
+      text-align: center;
+      z-index: 1000;
+    }
+
+    .selection-container, .quiz-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      max-width: 600px;
+      margin: 120px auto;
+      padding: 30px 25px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease-in-out;
+      box-sizing: border-box;
+    }
+
+    .selection-container h2 {
+      font-size: 22px;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .selection-container select, .answer-input {
+      width: 80%;
+      padding: 14px;
+      font-size: 18px;
+      margin: 15px 0;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      background-color: #fafafa;
+      transition: all 0.3s ease-in-out;
+      margin-bottom: 30px;
+    }
+
+    .selection-container select:focus, .answer-input:focus {
+      border-color: #58A4B0;
+      outline: none;
+    }
+
+    .selection-container button, .button-container button {
+      padding: 15px 30px;
+      font-size: 18px;
+      color: white;
+      background-color: #58A4B0;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+      width: 80%; /* Make sure the buttons have the same width */
+      margin: 15px 0;
+      box-sizing: border-box;
+    }
+
+    .selection-container button:hover, .button-container button:hover {
+      background-color: #2c7a99;
+    }
+
+    .question {
+      font-size: 26px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    .error-message {
+      color: red;
+      margin-top: 10px;
+      font-size: 16px;
+      display: none;
+    }
+
+    .exit-button {
+      background-color: #E63946;
+    }
+
+    .exit-button:hover {
+      background-color: #c6292e;
+    }
+
+    /* Exit Popup Style */
+    #exitPopup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      z-index: 2000;
+      width: 80%;
+      max-width: 400px;
+    }
+
+    #exitPopup p {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    #exitPopup button {
+      padding: 12px 25px;
+      background-color: #E63946;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      margin-top: 10px;
+      width: 45%;
+      margin: 10px;
+    }
+
+    #exitPopup button:hover {
+      background-color: #c6292e;
+    }
+
+    /* Styling for mobile responsiveness */
+    @media (max-width: 600px) {
+      header {
+        font-size: 24px;
+      }
+
+      .selection-container, .quiz-container {
+        width: 90%;
+      }
+
+      .selection-container select, .answer-input {
+        width: 90%;
+      }
+
+      .selection-container button {
+        width: 80%;
+      }
+
+      #exitPopup button {
+        width: 45%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    LearnixMath - Quiz
+  </header>
+
+  <!-- Number of Questions Selection Page -->
+  <div class="selection-container" id="selectionPage">
+    <h2>Select the number of questions and start the game:</h2>
+    <select id="numQuestions">
+      <option value="10">10 Questions</option>
+      <option value="20">20 Questions</option>
+      <option value="50">50 Questions</option>
+    </select>
+    <div class="button-container">
+      <button onclick="startGame()">Start Game</button>
+      <button onclick="exitGame()">Exit Game</button>
+    </div>
+  </div>
+
+  <!-- Quiz Question Page -->
+  <div class="quiz-container" id="quizPage" style="display:none;">
+    <div class="question" id="question"></div>
+    <input type="text" id="answer" class="answer-input" placeholder="Enter your answer">
+    <div class="error-message" id="errorMessage"></div>
+    <div class="button-container">
+      <button onclick="submitAnswer()">Submit</button>
+      <button class="exit-button" onclick="exitGame()">Exit</button>
+    </div>
+  </div>
+
+  <!-- Exit Confirmation Popup -->
+  <div id="exitPopup">
+    <p>Are you sure you want to exit the game?</p>
+    <div>
+      <button onclick="confirmExit()">Yes, Exit</button>
+      <button onclick="cancelExit()">No, Stay</button>
+    </div>
+  </div>
+
+  <script>
+    let numQuestions = 10;
+    let currentQuestionIndex = 0;
+    let score = 0;
+    const questions = [];
+    let gameStarted = false;
+
+    // Start the game
+    function startGame() {
+      numQuestions = parseInt(document.getElementById('numQuestions').value);
+      if (numQuestions) {
+        gameStarted = true;
+        document.getElementById('selectionPage').style.display = 'none';
+        document.getElementById('quizPage').style.display = 'flex';
+        generateQuestion();
+      }
+    }
+
+    // Generate a question based on the selected operation
+    function generateQuestion() {
+      let num1, num2, answer, questionText;
+      const operation = 'addition';  // Set operation type
+
+      switch (operation) {
+        case 'addition':
+          num1 = Math.floor(Math.random() * 10) + 1;
+          num2 = Math.floor(Math.random() * 10) + 1;
+          answer = num1 + num2;
+          questionText = `${num1} + ${num2} = ?`;
+          break;
+      }
+
+      questions.push({ question: questionText, correctAnswer: answer });
+      document.getElementById('question').textContent = questionText;
+      document.getElementById('errorMessage').style.display = 'none';
+    }
+
+    // Submit the answer and check if it's correct
+    function submitAnswer() {
+      const userAnswer = parseInt(document.getElementById('answer').value);
+      const correctAnswer = questions[currentQuestionIndex].correctAnswer;
+
+      if (userAnswer === correctAnswer) {
+        score++;
+        currentQuestionIndex++;
+        if (currentQuestionIndex < numQuestions) {
+          generateQuestion();
+          document.getElementById('answer').value = '';  // Clear the input field after each question
+        } else {
+          // Show score when all questions are answered
+          alert(`Quiz complete! Your score is: ${score}`);
+          gameStarted = false;
+          resetGame();
+        }
+      } else {
+        document.getElementById('errorMessage').textContent = 'Wrong answer! Please try again.';
+        document.getElementById('errorMessage').style.display = 'block';
+      }
+    }
+
+    // Exit the game with confirmation (popup inside page)
+    function exitGame() {
+      document.getElementById('exitPopup').style.display = 'block';
+      document.getElementById('quizPage').style.display = 'none';
+    }
+
+    // Confirm exit action
+    function confirmExit() {
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 2000);  // Redirect after 2 seconds
+    }
+
+    // Cancel exit action
+    function cancelExit() {
+      document.getElementById('exitPopup').style.display = 'none';
+      document.getElementById('quizPage').style.display = 'flex';
+    }
+
+    // Reset game
+    function resetGame() {
+      score = 0;
+      currentQuestionIndex = 0;
+      questions.length = 0;  // Clear the question array
+      document.getElementById('selectionPage').style.display = 'flex';
+      document.getElementById('quizPage').style.display = 'none';
+    }
+  </script>
+
+</body>
+</html>
