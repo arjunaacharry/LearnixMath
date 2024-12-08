@@ -14,7 +14,8 @@
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #F0F4F8; /* Light background color */
+      background-color: #F4F4F4; /* Light Gray Background */
+      color: #333333; /* Dark Gray Text */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -29,8 +30,8 @@
       top: 0;
       left: 0;
       right: 0;
-      background-color: #2C7A99;
-      color: white;
+      background-color: #2C7A99; /* Primary Blue */
+      color: #FFFFFF; /* White Text */
       padding: 15px 0;  /* Reduced padding */
       font-size: 30px;
       font-weight: bold;
@@ -45,21 +46,21 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 30px; /* Increased gap between cards */
-      padding: 20px 20px; /* Adjusted padding */
+      gap: 20px; /* Reduced gap between cards */
+      padding: 20px;
       max-width: 1200px;
       width: 100%;
-      margin-top: 120px;  /* Reduced margin-top to close the gap */
+      margin-top: 100px; /* Reduced margin-top to close the gap */
     }
 
     /* Card Styles */
     .card {
-      background-color: white;
+      background-color: #FFFFFF; /* White Card */
       border-radius: 12px;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-      padding: 30px;  /* Increased padding for better spacing */
+      padding: 20px;  /* Adjusted padding for better content spacing */
       text-align: center;
-      width: 280px;  /* Adjusted width */
+      width: 280px;  /* Adjusted card width */
       transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
       cursor: pointer;
       overflow: hidden;
@@ -88,22 +89,22 @@
     .card-title {
       font-size: 26px;
       font-weight: 700;
-      color: #2C7A99;
+      color: #2C7A99; /* Primary Blue */
       margin-bottom: 15px;
     }
 
     .card-description {
       font-size: 16px;
-      color: #555;
-      margin-bottom: 25px;
+      color: #333333; /* Dark Gray Text */
+      margin-bottom: 20px;
       line-height: 1.5;
     }
 
     .card-button {
-      background-color: #2C7A99;
+      background-color: #58A4B0; /* Accent Light Blue */
       color: white;
       border: none;
-      padding: 15px 30px;  /* Increased padding */
+      padding: 15px 30px;
       border-radius: 10px;
       font-size: 16px;
       cursor: pointer;
@@ -112,7 +113,7 @@
     }
 
     .card-button:hover {
-      background-color: #58A4B0;
+      background-color: #2C7A99; /* Primary Blue on Hover */
       transform: scale(1.05);
     }
 
