@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LearnixMath - Splash</title>
+  <style>
+    /* Basic Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Helvetica', 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: white; /* White background */
+      color: #2C7A99; /* Primary Blue for app name */
+      text-align: center;
+      overflow: hidden;
+    }
+
+    #splash-screen {
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    #loading-text {
+      font-size: 18px;
+      margin-top: 10px;
+      color: black; /* Set color of "Loading..." text to black */
+    }
+  </style>
+</head>
+<body>
+  <!-- Splash Screen -->
+  <div id="splash-screen">
+    <div>LearnixMath</div> <!-- Text as the name -->
+    <p id="loading-text">Loading...</p>
+  </div>
+
+  <script>
+    window.onload = function() {
+      // Check if splash screen has already been shown
+      if (!localStorage.getItem("splashScreenSeen")) {
+        // Set the flag in localStorage
+        localStorage.setItem("splashScreenSeen", "true");
+        setTimeout(function() {
+          window.location.href = 'home.html';  // Redirect to home page after splash screen
+        }, 10000);  // 10000ms = 10 seconds
+      } else {
+        // If splash screen has already been seen, directly go to home page
+        window.location.href = 'home.html';
+      }
+    };
+  </script>
+</body>
+</html>

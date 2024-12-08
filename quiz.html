@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LearnixMath - Quiz</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Quiz Page -->
+  <div id="app">
+    <h2>Hello, <span id="username-display"></span></h2>
+    <div class="operation-selection">
+      <label for="operation">Select Operation:</label>
+      <select id="operation" onchange="showLevels()">
+        <option value="Addition">Addition</option>
+        <option value="Subtraction">Subtraction</option>
+        <option value="Multiplication">Multiplication</option>
+        <option value="Division">Division</option>
+      </select>
+    </div>
+
+    <div id="level-selection" class="hidden">
+      <label for="level">Select Level:</label>
+      <select id="level">
+        <option value="Beginner">Beginner</option>
+        <option value="Intermediate">Intermediate</option>
+        <option value="Master">Master</option>
+      </select>
+    </div>
+
+    <div id="question-selection" class="hidden">
+      <label for="questions">How many questions would you like?</label>
+      <select id="questions">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+      </select>
+    </div>
+
+    <button id="start-quiz-btn" class="hidden" onclick="startQuiz()">Start Quiz</button>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const userName = localStorage.getItem("userName");
+      if (!userName) {
+        window.location.href = "home.html"; // Redirect to home if no username found
+      } else {
+        document.getElementById("username-display").textContent = userName;
+      }
+    });
+
+    let selectedOperation = "";
+    let selectedLevel = "";
+    let numOfQuestions = 0;
+    let questionData = [];
+
+    function showLevels() {
+      selectedOperation = document.getElementById("operation").value;
+      document.getElementById("level-selection").classList.remove("hidden");
+    }
+
+    function startQuiz() {
+      selectedLevel = document.getElementById("level").value;
+      numOfQuestions = parseInt(document.getElementById("questions").value);
+
+      // Hide level selection and question selection
+      document.getElementById("level-selection").classList.add("hidden");
+      document.getElementById("question-selection").classList.add("hidden");
+      document.getElementById("start-quiz-btn").classList.add("hidden");
+
+      generateQuestions();
+    }
+
+    function generateQuestions() {
+      questionData = [];
+      for (let i = 1; i <= numOfQuestions; i++) {
+        let num1 = getRandomNumber(selectedLevel);
+        let num2 = getRandomNumber(selectedLevel);
+        let questionText = `${num1} ${getOperationSymbol(selectedOperation)} ${num2}`;
+        let answer = calculateAnswer(num1, num2, selectedOperation);
+
+        questionData.push({
+          question: questionText,
+          answer: answer,
+          userAnswer: null
+        });
+      }
+
+      displayQuestions();
+    }
+
+    function displayQuestions() {
+      const quizContainer = document.createElement("div");
+      quizContainer.id = "quiz-container";
+      document.getElementById("app").appendChild(quizContainer);
+
+      questionData.forEach((q, index) => {
+        const questionElement = document.createElement("div");
+        questionElement.innerHTML = `
+          <p>${q.question}</p>
+          <input type="number" id="answer-${index}" placeholder="Your answer" onchange="saveAnswer(${index})" />
+        `;
+        quizContainer.appendChild(questionElement);
+      });
+
+      const finishButton = document.createElement("button");
+      finishButton.textContent = "Finish Quiz";
+      finishButton.onclick = finishQuiz;
+      quizContainer.appendChild(finishButton);
+    }
+
+    function saveAnswer(index) {
+      const userAnswer = document.getElementById(`answer-${index}`).value;
+      questionData[index].userAnswer = userAnswer;
+    }
+
+    function finishQuiz() {
+      let score = 0;
+
+      questionData.forEach(q => {
+        if (q.userAnswer == q.answer) {
+          score++;
+        }
+      });
+
+      alert(`Your score is: ${score} out of ${numOfQuestions}`);
+
+      // Redirect to the profile page with results
+      localStorage.setItem("score", score);
+      window.location.href = "profile.html";
+    }
+
+    function getRandomNumber(level) {
+      switch (level) {
+        case "Beginner":
+          return Math.floor(Math.random() * 10) + 1;
+        case "Intermediate":
+          return Math.floor(Math.random() * 100) + 1;
+        case "Master":
+          return Math.floor(Math.random() * 1000) + 1;
+        default:
+          return Math.floor(Math.random() * 10) + 1;
+      }
+    }
+
+    function getOperationSymbol(operation) {
+      switch (operation) {
+        case "Addition":
+          return "+";
+        case "Subtraction":
+          return "-";
+        case "Multiplication":
+          return "×";
+        case "Division":
+          return "÷";
+        default:
+          return "+";
+      }
+    }
+
+    function calculateAnswer(num1, num2, operation) {
+      switch (operation) {
+        case "Addition":
+          return num1 + num2;
+        case "Subtraction":
+          return num1 - num2;
+        case "Multiplication":
+          return num1 * num2;
+        case "Division":
+          return num1 / num2;
+        default:
+          return 0;
+      }
+    }
+  </script>
+</body>
+</html>

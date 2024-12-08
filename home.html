@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LearnixMath - Home</title>
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #F4F7FC;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      padding-top: 80px;  /* Added padding to avoid header overlap */
+    }
+
+    /* Header Section - Fixed */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: #2C7A99;
+      color: white;
+      padding: 20px;
+      font-size: 32px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-align: center;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Content Container */
+    .content-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+      max-width: 1200px;
+      width: 100%;
+      margin-top: 80px;  /* Added margin to prevent overlap with fixed header */
+    }
+
+    /* Card Styles */
+    .card {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      text-align: center;
+      width: 260px;
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .card-description {
+      font-size: 16px;
+      color: #777;
+      margin-bottom: 25px;
+    }
+
+    .card-button {
+      background-color: #2C7A99;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+
+    .card-button:hover {
+      background-color: #58A4B0;
+    }
+
+    /* Navbar Styles */
+    .navbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #2C7A99;
+      color: white;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 15px 0;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar .icon {
+      width: 30px;
+      height: 30px;
+      fill: white;
+      transition: transform 0.3s ease, fill 0.3s ease;
+      cursor: pointer;
+    }
+
+    .navbar .icon:hover {
+      transform: scale(1.2);
+      fill: #58A4B0;
+    }
+
+    /* Responsive Design */
+    @media (min-width: 768px) {
+      .content-container {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header>
+    LearnixMath
+  </header>
+
+  <!-- Main Content Section -->
+  <div class="content-container">
+    <div class="card">
+      <div class="card-title">Addition</div>
+      <div class="card-description">Practice addition problems, from easy to difficult.</div>
+      <button class="card-button" onclick="window.location.href='addition.html'">Start</button>
+    </div>
+    <div class="card">
+      <div class="card-title">Subtraction</div>
+      <div class="card-description">Improve your subtraction skills with various levels.</div>
+      <button class="card-button" onclick="window.location.href='subtraction.html'">Start</button>
+    </div>
+    <div class="card">
+      <div class="card-title">Multiplication</div>
+      <div class="card-description">Master multiplication with a variety of problems.</div>
+      <button class="card-button" onclick="window.location.href='multiplication.html'">Start</button>
+    </div>
+    <div class="card">
+      <div class="card-title">Division</div>
+      <div class="card-description">Test your division skills with easy to advanced problems.</div>
+      <button class="card-button" onclick="window.location.href='division.html'">Start</button>
+    </div>
+  </div>
+
+  <!-- Navbar Section -->
+  <div class="navbar">
+    <!-- Home Icon -->
+    <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" onclick="window.location.href='home.html'">
+      <path d="M12 3l10 9h-3v9H5v-9H2L12 3z"/>
+    </svg>
+    <!-- Profile Icon -->
+    <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" onclick="window.location.href='profile.html'">
+      <path d="M12 12c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm0 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4z"/>
+    </svg>
+  </div>
+
+</body>
+</html>
