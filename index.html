@@ -62,7 +62,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      height: 350px; /* Adjust height for consistency */
+      height: 248px; /* Adjust height for consistency */
     }
 
     .card-title {
@@ -134,7 +134,7 @@
       cursor: pointer;
       border: none;
       width: 100%;
-      max-width: 180px;
+      max-width: 248px;
       transition: background-color 0.3s ease;
     }
 
@@ -220,7 +220,7 @@
     }
 
     function startQuiz(difficulty) {
-      // Redirect to the game page with the selected operation and difficulty
+      // Construct URL to pass the operation and difficulty
       window.location.href = `game.html?operation=${selectedOperation}&difficulty=${difficulty}`;
     }
   </script>

@@ -74,7 +74,7 @@
       border-radius: 8px;
       cursor: pointer;
       transition: background-color 0.3s ease-in-out;
-      width: 80%; /* Make sure the buttons have the same width */
+      width: 100%;
       margin: 15px 0;
       box-sizing: border-box;
     }
@@ -219,6 +219,11 @@
   </div>
 
   <script>
+    // Get operation and difficulty from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const operation = urlParams.get('operation');
+    const difficulty = urlParams.get('difficulty');
+
     let numQuestions = 10;
     let currentQuestionIndex = 0;
     let score = 0;
@@ -232,43 +237,135 @@
         gameStarted = true;
         document.getElementById('selectionPage').style.display = 'none';
         document.getElementById('quizPage').style.display = 'flex';
-        generateQuestion();
+        generateQuestions();
       }
     }
 
-    // Generate a question based on the selected operation
-    function generateQuestion() {
-      let num1, num2, answer, questionText;
-      const operation = 'addition';  // Set operation type
+    // Generate questions based on operation and difficulty
+    function generateQuestions() {
+      for (let i = 0; i < numQuestions; i++) {
+        let question = generateSingleQuestion(operation, difficulty);
+        questions.push(question);
+      }
+      displayCurrentQuestion();
+    }
 
-      switch (operation) {
-        case 'addition':
-          num1 = Math.floor(Math.random() * 10) + 1;
-          num2 = Math.floor(Math.random() * 10) + 1;
-          answer = num1 + num2;
-          questionText = `${num1} + ${num2} = ?`;
+    // Generate a single question based on operation and difficulty
+    function generateSingleQuestion(operation, difficulty) {
+      let num1, num2, answer, questionText;
+
+      switch (difficulty) {
+        case 'beginner':
+          switch (operation) {
+            case 'addition':
+              num1 = Math.floor(Math.random() * 10);
+              num2 = Math.floor(Math.random() * 10);
+              answer = num1 + num2;
+              questionText = `${num1} + ${num2} = ?`;
+              break;
+            case 'subtraction':
+              num1 = Math.floor(Math.random() * 10);
+              num2 = Math.floor(Math.random() * num1);
+              answer = num1 - num2;
+              questionText = `${num1} - ${num2} = ?`;
+              break;
+            case 'multiplication':
+              num1 = Math.floor(Math.random() * 5);
+              num2 = Math.floor(Math.random() * 5);
+              answer = num1 * num2;
+              questionText = `${num1} × ${num2} = ?`;
+              break;
+            case 'division':
+              num2 = Math.floor(Math.random() * 5) + 1;
+              num1 = num2 * (Math.floor(Math.random() * 5) + 1);
+              answer = num1 / num2;
+              questionText = `${num1} ÷ ${num2} = ?`;
+              break;
+          }
+          break;
+
+        case 'intermediate':
+          switch (operation) {
+            case 'addition':
+              num1 = Math.floor(Math.random() * 50) + 10;
+              num2 = Math.floor(Math.random() * 50) + 10;
+              answer = num1 + num2;
+              questionText = `${num1} + ${num2} = ?`;
+              break;
+            case 'subtraction':
+              num1 = Math.floor(Math.random() * 100) + 50;
+              num2 = Math.floor(Math.random() * num1);
+              answer = num1 - num2;
+              questionText = `${num1} - ${num2} = ?`;
+              break;
+            case 'multiplication':
+              num1 = Math.floor(Math.random() * 10);
+              num2 = Math.floor(Math.random() * 10);
+              answer = num1 * num2;
+              questionText = `${num1} × ${num2} = ?`;
+              break;
+            case 'division':
+              num2 = Math.floor(Math.random() * 10) + 1;
+              num1 = num2 * (Math.floor(Math.random() * 10) + 1);
+              answer = num1 / num2;
+              questionText = `${num1} ÷ ${num2} = ?`;
+              break;
+          }
+          break;
+
+        case 'master':
+          switch (operation) {
+            case 'addition':
+              num1 = Math.floor(Math.random() * 500) + 100;
+              num2 = Math.floor(Math.random() * 500) + 100;
+              answer = num1 + num2;
+              questionText = `${num1} + ${num2} = ?`;
+              break;
+            case 'subtraction':
+              num1 = Math.floor(Math.random() * 1000) + 500;
+              num2 = Math.floor(Math.random() * num1);
+              answer = num1 - num2;
+              questionText = `${num1} - ${num2} = ?`;
+              break;
+            case 'multiplication':
+              num1 = Math.floor(Math.random() * 20);
+              num2 = Math.floor(Math.random() * 20);
+              answer = num1 * num2;
+              questionText = `${num1} × ${num2} = ?`;
+              break;
+            case 'division':
+              num2 = Math.floor(Math.random() * 20) + 1;
+              num1 = num2 * (Math.floor(Math.random() * 20) + 1);
+              answer = num1 / num2;
+              questionText = `${num1} ÷ ${num2} = ?`;
+              break;
+          }
           break;
       }
 
-      questions.push({ question: questionText, correctAnswer: answer });
-      document.getElementById('question').textContent = questionText;
+      return { question: questionText, correctAnswer: answer };
+    }
+
+    // Display current question
+    function displayCurrentQuestion() {
+      document.getElementById('question').textContent = questions[currentQuestionIndex].question;
       document.getElementById('errorMessage').style.display = 'none';
+      document.getElementById('answer').value = '';
     }
 
     // Submit the answer and check if it's correct
     function submitAnswer() {
-      const userAnswer = parseInt(document.getElementById('answer').value);
+      const userAnswer = parseFloat(document.getElementById('answer').value);
       const correctAnswer = questions[currentQuestionIndex].correctAnswer;
 
       if (userAnswer === correctAnswer) {
         score++;
         currentQuestionIndex++;
         if (currentQuestionIndex < numQuestions) {
-          generateQuestion();
-          document.getElementById('answer').value = '';  // Clear the input field after each question
+          displayCurrentQuestion();
         } else {
           // Show score when all questions are answered
-          alert(`Quiz complete! Your score is: ${score}`);
+          alert(`Quiz complete! Your score is: ${score} out of ${numQuestions}`);
           gameStarted = false;
           resetGame();
         }
