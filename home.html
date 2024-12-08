@@ -20,7 +20,7 @@
       align-items: center;
       justify-content: flex-start;
       height: 100vh;
-      padding-top: 80px;  /* Added padding to avoid header overlap */
+      padding-top: 60px;  /* Reduced padding-top to minimize gap */
     }
 
     /* Header Section - Fixed */
@@ -31,7 +31,7 @@
       right: 0;
       background-color: #2C7A99;
       color: white;
-      padding: 20px;
+      padding: 20px 0;
       font-size: 32px;
       font-weight: bold;
       letter-spacing: 2px;
@@ -46,10 +46,10 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 20px;
-      padding: 20px;
+      padding: 40px 20px;  /* Ensure padding inside content */
       max-width: 1200px;
       width: 100%;
-      margin-top: 80px;  /* Added margin to prevent overlap with fixed header */
+      margin-top: 80px;  /* Adjusted margin-top to reduce gap between header and cards */
     }
 
     /* Card Styles */
@@ -132,12 +132,13 @@
       .content-container {
         flex-direction: row;
         justify-content: space-between;
+        padding: 40px 40px; /* Adjusted padding for larger screens */
       }
     }
 
     @media (max-width: 768px) {
       .card {
-        width: 100%;
+        width: 90%; /* Adjusted card width for smaller screens */
       }
     }
   </style>
